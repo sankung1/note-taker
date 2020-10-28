@@ -20,5 +20,16 @@ module.exports = app => {
         app.get("/api/notes/:id", (req, res) => {
             res.json(notes[req.params.id]);
         })
-    })
+
+
+        // deleting the note with the selected id
+        app.delete("/api/notes/:id", (req,res)=>{
+            notes.splice(req.params.id, 1);
+        });
+
+        //sending the notes.hmtl file back to the user
+        app.get("/notes", (req,res)=>{
+            res.sendFile(path.join(__dirname, "../public/index.html"));
+        })
+    });
 }
