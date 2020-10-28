@@ -15,6 +15,7 @@ module.exports = app => {
         app.post("/api/notes", (req, res) => {
             let addNote = req.body;
             notes.push(addNote);
+            newDb();
         })
         // getting the unique id of the added note
         app.get("/api/notes/:id", (req, res) => {
@@ -25,6 +26,7 @@ module.exports = app => {
         // deleting the note with the selected id
         app.delete("/api/notes/:id", (req,res)=>{
             notes.splice(req.params.id, 1);
+            newDb();
         });
 
         //sending the notes.hmtl file back to the user
@@ -36,5 +38,13 @@ module.exports = app => {
         app.get("*", (req,res)=>{
             res.sendFile(path.join(__dirname, "../public/index.html"));
         })
+
+        // this fucnction will update the db.json file
+        function newDb(){
+            fs.writeFile("db/db.json", JSON.stringify(notes, "\t"), error =>{
+                if (error) throw error;
+                return true;
+            });
+        }
     });
 }
