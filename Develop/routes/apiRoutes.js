@@ -13,5 +13,9 @@ module.exports = app =>{
         let addNote = req.body;
         notes.push(addNote);       
     })
+    // getting the unique id of the added note
+    app.get("/api/notes/:id", (req,res)=>{
+        res.json(notes[req.params.id]);
+    })
 
 }
