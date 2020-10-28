@@ -30,6 +30,11 @@ module.exports = app => {
         //sending the notes.hmtl file back to the user
         app.get("/notes", (req,res)=>{
             res.sendFile(path.join(__dirname, "../public/index.html"));
+        });
+
+        //send the index.html file back to the user when they want to return home
+        app.get("*", (req,res)=>{
+            res.sendFile(path.join(__dirname, "../public/index.html"));
         })
     });
 }
