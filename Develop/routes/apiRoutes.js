@@ -11,38 +11,25 @@ module.exports = app => {
             res.json(notes);
         })
 
+
+
+        // setting up a post route for notes api route
+        app.post("/api/notes", (req, res) => {
+            let addNote = req.body;
+            notes.push(addNote);
+            newDb();
+            res.end();
+        })
+
         // getting the unique id of the added note
         app.get("/api/notes/:id", (req, res) => {
             res.json(notes[req.params.id]);
         })
 
 
-        // setting up a post route for notes api route
-        app.post("/api/notes", (req, res) => {
-            let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-            let addNote = req.body;
-            let noteUniqueID = (savedNotes.length).toString();
-            addNote.id = noteUniqueID;
-            savedNotes.push(addNote);
-            newDb();
-            res.end();
-        })
-
-
         // deleting the note with the selected id
         app.delete("/api/notes/:id", (req, res) => {
-            // notes.splice(req.params.id, 1);
-            let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-            let noteID = req.params.id;
-            let newID = 0;
-            savedNotes = savedNotes.filter(currentNote => {
-                return currentNote.id != noteID;
-            });
-
-            for(currentNote of savedNotes){
-                currentNote.id = newID.toString();
-                newID++;
-            }
+            notes.splice(req.params.id, 1);
             newDb();
             res.end();
         });
