@@ -16,6 +16,7 @@ module.exports = app => {
             let addNote = req.body;
             notes.push(addNote);
             newDb();
+            res.end();
         })
         // getting the unique id of the added note
         app.get("/api/notes/:id", (req, res) => {
@@ -27,6 +28,7 @@ module.exports = app => {
         app.delete("/api/notes/:id", (req,res)=>{
             notes.splice(req.params.id, 1);
             newDb();
+            res.end();
         });
 
         //sending the notes.hmtl file back to the user
