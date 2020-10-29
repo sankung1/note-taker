@@ -11,39 +11,44 @@ module.exports = app => {
             res.json(notes);
         })
 
-        // setting up a post route for notes api route
-        app.post("/api/notes", (req, res) => {
-            let addNote = req.body;
-            notes.push(addNote);
-            newDb();
-            res.end();
-        })
         // getting the unique id of the added note
         app.get("/api/notes/:id", (req, res) => {
             res.json(notes[req.params.id]);
         })
 
 
+        // setting up a post route for notes api route
+        app.post("/api/notes", (req, res) => {
+            let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+            let addNote = req.body;
+            let noteID = (savedNotes.length).toString();
+            addNote.id = noteID
+            notes.push(addNote);
+            newDb();
+            res.end();
+        })
+
+
         // deleting the note with the selected id
-        app.delete("/api/notes/:id", (req,res)=>{
+        app.delete("/api/notes/:id", (req, res) => {
             notes.splice(req.params.id, 1);
             newDb();
             res.end();
         });
 
         //sending the notes.hmtl file back to the user
-        app.get("/notes", (req,res)=>{
+        app.get("/notes", (req, res) => {
             res.sendFile(path.join(__dirname, "../public/notes.html"));
         });
 
         //send the index.html file back to the user when they want to return home
-        app.get("*", (req,res)=>{
+        app.get("*", (req, res) => {
             res.sendFile(path.join(__dirname, "../public/index.html"));
         })
 
         // this fucnction will update the db.json file
-        function newDb(){
-            fs.writeFile("db/db.json", JSON.stringify(notes, "\t"), error =>{
+        function newDb() {
+            fs.writeFile("db/db.json", JSON.stringify(notes, "\t"), error => {
                 if (error) throw error;
                 return true;
             });
