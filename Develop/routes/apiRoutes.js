@@ -23,7 +23,7 @@ module.exports = app => {
             let addNote = req.body;
             let noteUniqueID = (savedNotes.length).toString();
             addNote.id = noteUniqueID;
-            savedNotes.push(newNote);
+            savedNotes.push(addNote);
             newDb();
             res.end();
         })
