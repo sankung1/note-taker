@@ -19,10 +19,11 @@ module.exports = app => {
 
         // setting up a post route for notes api route
         app.post("/api/notes", (req, res) => {
+            let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
             let addNote = req.body;
-            let noteUniqueID = notes.length;
+            let noteUniqueID = (savedNotes.length).toString();
             addNote.id = noteUniqueID;
-            notes.push(addNote);
+            savedNotes.push(newNote);
             newDb();
             res.end();
         })
@@ -31,14 +32,15 @@ module.exports = app => {
         // deleting the note with the selected id
         app.delete("/api/notes/:id", (req, res) => {
             // notes.splice(req.params.id, 1);
+            let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
             let noteID = req.params.id;
             let newID = 0;
-            const savedNotes = notes.filter(currentNote =>{
+            savedNotes = savedNotes.filter(currentNote => {
                 return currentNote.id != noteID;
             });
 
             for(currentNote of savedNotes){
-                currentNote.id = newID;
+                currentNote.id = newID.toString();
                 newID++;
             }
             newDb();
